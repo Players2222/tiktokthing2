@@ -55,41 +55,36 @@ class Menu(QMainWindow,Ui_Main_menu):
         self.StartB.clicked.connect(self.start)
     
     def start(self):
-        script=script_file+"/"+self.ScriptList.currentText()
-        video=video_file+"/"+self.VideoList.currentText()
-        self.subtitles(script)
-
-    def subtitles(self,script):
-        with open(script,"r") as temp:
-            script = temp.read()
-        sentences = wrap(script,30)
-
-        global subtitles
-        subtitles = []
-        start_time = 0
-        for sentence in sentences:
-            duration = 3
-            subtitles.append({
-                'text': sentence ,
-                'start': start_time,
-                'end': start_time + duration
-            })
-            start_time += duration
+        print("Starting!")
+        self.webscrape()
+    
+    def webscrape(self):
 
         self.voiceover()
 
     def voiceover(self):
-        print(subtitles)
-        
-        
+        applio=os.path
 
-        self.subtovid()
-
-    def subtovid(self):
         self.cutvideo()
 
     def cutvideo(self):
-        print("end")
+
+        self.videoplusvoice()
+
+    def videoplusvoice(self):
+
+        self.subtitles()
+
+    def subtitles(self):
+
+        self.videoplussub()
+    
+    def videoplussub(self):
+
+        self.upload()
+    
+    def upload(self):
+        pass
 
 if __name__ == '__main__':
     app=QApplication(sys.argv)

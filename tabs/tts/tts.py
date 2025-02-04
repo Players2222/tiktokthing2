@@ -125,7 +125,7 @@ def tts_tab():
                 placeholder=i18n(
                     "The path to the text file that contains content for text to speech."
                 ),
-                value="",
+                value="C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/script/script.txt",
                 interactive=True,
             )
 
