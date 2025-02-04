@@ -6,10 +6,11 @@ applio=__file__.replace(os.path.basename(__file__),"")
 applio=applio.replace("\\","/")
 applio=applio + "/run-applio.bat"
 
-# data={
-# }
-
 r=requests.post("http://127.0.0.1:6969/")
 
-process=subprocess.Popen(applio)
+subprocess.Popen(applio, shell=True)
 
+if r.status_code == 200:
+    print("Reci")
+else:
+    print("hmm")

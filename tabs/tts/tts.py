@@ -94,7 +94,7 @@ def tts_tab():
         info=i18n("Select the TTS voice to use for the conversion."),
         choices=short_names,
         interactive=True,
-        value=random.choice(short_names),
+        value="en-US-AndrewNeural",
     )
 
     tts_rate = gr.Slider(
