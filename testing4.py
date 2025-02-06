@@ -4,15 +4,15 @@ import edge_tts
 from rvc.infer.infer import VoiceConverter
 
 #tts settings
-input_text = "test_edge_tts.txt"
+input_text = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/script/script.txt"
 text = ""
-speaker = "en-GB-RyanNeural"
+speaker = "en-US-AndrewNeural"
 rate = 0
 #infer settings
-pth_path = "G:\\ApplioV3.2.2\\logs\\mymodel.pth"
-index_path = "G:\\ApplioV3.2.2\\logs\\mymodel.index"
-input_path = "F:\\TTS_OUT\\tts_out.wav"
-output_path = "F:\\TTS_OUT\\infer_out.wav"
+pth_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamapath.pth"
+index_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamaindex.index"
+input_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/tts_output.wav"
+output_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/infer_out.wav"
 
 pitch = 0
 filter_radius = 3

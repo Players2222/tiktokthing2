@@ -94,7 +94,7 @@ def tts_tab():
         info=i18n("Select the TTS voice to use for the conversion."),
         choices=short_names,
         interactive=True,
-        value="en-US-AndrewNeural",
+        value=random.choice(short_names),
     )
 
     tts_rate = gr.Slider(
@@ -125,7 +125,7 @@ def tts_tab():
                 placeholder=i18n(
                     "The path to the text file that contains content for text to speech."
                 ),
-                value="C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/script/script.txt",
+                value="",
                 interactive=True,
             )
 
