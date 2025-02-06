@@ -1,0 +1,80 @@
+import time
+import asyncio
+import edge_tts
+from rvc.infer.infer import VoiceConverter
+# import os
+#tts settings
+input_text = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/script/script.txt"
+text = ""
+speaker = "en-US-AndrewNeural"
+rate = 0
+#infer settings
+pth_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamapath.pth"
+index_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamaindex.index"
+input_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/tts_output.wav"
+output_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/infer_out.wav"
+
+pitch = 0
+filter_radius = 3
+index_rate = 0.75
+volume_envelope = 1
+protect = 0.5
+hop_length = 128
+f0_method = "rmvpe"
+split_audio = False
+f0_autotune = False
+clean_audio = True
+clean_strength = 0.5
+export_format = "MP3"
+upscale_audio = True
+f0_file = None
+embedder_model = "contentvec"
+embedder_model_custom = None
+
+async def main():
+    rates = f"+{rate}%" if rate >= 0 else f"{rate}%"
+    start_time1 = time.time()
+    await edge_tts.Communicate(
+        text,
+        speaker,
+        rate=rates,
+    ).save(input_path)
+    elapsed_time = time.time() - start_time1
+    print(f"TTS gen time in {elapsed_time:.2f} seconds.")
+
+if __name__ == "__main__":
+    # lastchanged=os.path.getmtime(output_path)
+    with open(input_text, 'r') as file:
+        text = file.read()
+    
+    asyncio.run(main())
+
+    start_time1 = time.time()
+    infer_pipeline = VoiceConverter()
+    infer_pipeline.convert_audio(
+        pitch=pitch,
+        filter_radius=filter_radius,
+        index_rate=index_rate,
+        volume_envelope=volume_envelope,
+        protect=protect,
+        hop_length=hop_length,
+        f0_method=f0_method,
+        audio_input_path=input_path,
+        audio_output_path=output_path,
+        model_path=pth_path,
+        index_path=index_path,
+        split_audio=split_audio,
+        f0_autotune=f0_autotune,
+        clean_audio=clean_audio,
+        clean_strength=clean_strength,
+        export_format=export_format,
+        upscale_audio=upscale_audio,
+        f0_file=f0_file,
+        embedder_model=embedder_model,
+        embedder_model_custom=embedder_model_custom,
+    )
+    print("Done")
+    elapsed_time = time.time() - start_time1
+    print(f"Inference time in {elapsed_time:.2f} seconds.")
+
+    
