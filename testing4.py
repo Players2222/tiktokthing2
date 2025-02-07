@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     with open(input_text, 'r') as file:
         text = file.read()
-
+    
     asyncio.run(main())
 
     start_time1 = time.time()
@@ -75,3 +75,5 @@ if __name__ == "__main__":
     )
     elapsed_time = time.time() - start_time1
     print(f"Inference time in {elapsed_time:.2f} seconds.")
+
+    
