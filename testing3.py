@@ -45,16 +45,13 @@ async def main(text):
 class hello():
     def __init__(self):
         super().__init__()
-        self.setup()
-        
-    def setup(self):
+        self.voiceover()
+
+    def voiceover(self):
         with open(input_text, 'r') as file:
             text = file.read()
         
         asyncio.run(main(text))
-        self.voiceover()
-
-    def voiceover(self):
         start_time1 = time.time()
         infer_pipeline = VoiceConverter()
         infer_pipeline.convert_audio(
