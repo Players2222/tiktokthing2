@@ -2,17 +2,28 @@ import time
 import asyncio
 import edge_tts
 from rvc.infer.infer import VoiceConverter
+filename="testing3.py"
+
+script_file=__file__+"/script"
+video_file=__file__+"/video"
+finish_file=__file__+"/finished"
+
+basepath=__file__.replace("\\","/").replace(filename,"/")
+script_file=script_file.replace("\\","/").replace(filename,"/")
+video_file=video_file.replace("\\","/").replace(filename,"/")
+finish_file=finish_file.replace("\\","/").replace(filename,"/")
+
 
 #tts settings
-input_text = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/script/script.txt"
+input_text = script_file+"/script.txt"
 text = ""
 speaker = "en-US-AndrewNeural"
 rate = 0
 #infer settings
-pth_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamapath.pth"
-index_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamaindex.index"
-input_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/tts_output.wav"
-output_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/infer_out.wav"
+pth_path = basepath+"/logs/obama/obamapath.pth"
+index_path = basepath+"/logs/obama/obamaindex.index"
+input_path = basepath+"/assets/audios/tts_output.wav"
+output_path = finish_file+"/tts.wav"
 
 pitch = 0
 filter_radius = 3

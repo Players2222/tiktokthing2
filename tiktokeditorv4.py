@@ -16,16 +16,43 @@ from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip, AudioFil
 from moviepy.config import change_settings 
 change_settings({"IMAGEMAGICK_BINARY": "C:\\Program Files\ImageMagick-7.1.1-Q16-HDRI\magick.exe"})
 
+
+#creating constants and folders
+filename="/tiktokeditorv4.py/"
+
+script_file=__file__+"/script"
+video_file=__file__+"/video"
+middle_file=__file__+"/middle"
+finish_file=__file__+"/finished"
+
+basepath=__file__.replace("\\","/").replace(filename,"/")
+script_file=script_file.replace("\\","/").replace(filename,"/")
+video_file=video_file.replace("\\","/").replace(filename,"/")
+middle_file=middle_file.replace("\\","/").replace(filename,"/")
+finish_file=finish_file.replace("\\","/").replace(filename,"/")
+
+if not os.path.exists(script_file):
+            os.mkdir(script_file)
+
+if not os.path.exists(video_file):
+            os.mkdir(video_file)
+
+if not os.path.exists(finish_file):
+            os.mkdir(finish_file)
+
+if not os.path.exists(middle_file):
+            os.mkdir(middle_file)
+
 #tts settings
-input_text = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/script/script.txt"
+input_text = script_file+"/script.txt"
 text = ""
 speaker = "en-US-AndrewNeural"
 rate = 0
 #infer settings
-pth_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamapath.pth"
-index_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/logs/obama/obamaindex.index"
-input_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/tts_output.wav"
-output_path = "C:/Users/DongYu/Desktop/things/code/python_projects/Capcut/assets/audios/infer_out.wav"
+pth_path = basepath+"/logs/obama/obamapath.pth"
+index_path = basepath+"/logs/obama/obamaindex.index"
+input_path = basepath+"/assets/audios/tts_output.wav"
+output_path = middle_file+"/tts.wav"
 
 pitch = 0
 filter_radius = 3
@@ -59,42 +86,7 @@ class Menu(QMainWindow,Ui_Main_menu):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setup()
-    def setup(self):
-        filename="/tiktokeditorv4.py/"
-
-        global script_file, video_file, finish_file
-
-        script_file=__file__+"/script"
-        video_file=__file__+"/video"
-        finish_file=__file__+"/finished"
-
-        script_file=script_file.replace("\\","/").replace(filename,"/")
-        video_file=video_file.replace("\\","/").replace(filename,"/")
-        finish_file=finish_file.replace("\\","/").replace(filename,"/")
-
-        if not os.path.exists(script_file):
-            os.mkdir(script_file)
-
-        if not os.path.exists(video_file):
-            os.mkdir(video_file)
-
-        if not os.path.exists(finish_file):
-            os.mkdir(finish_file)
-
-        script_dir=QDir(script_file)
-        script_dir.setFilter(QDir.Files)
-        script_dir.setNameFilters(["*.txt"])
-        scripts = script_dir.entryList()
-        self.ScriptList.addItems(scripts)
-
-        video_dir=QDir(video_file)
-        video_dir.setFilter(QDir.Files)
-        video_dir.setNameFilters(["*.mp4"])
-        videos = video_dir.entryList()
-        self.VideoList.addItems(videos)
-
-        self.StartB.clicked.connect(self.start)
+        self.start()
     
     def start(self):
         print("Starting!")
@@ -140,11 +132,23 @@ class Menu(QMainWindow,Ui_Main_menu):
         self.cutvideo()
 
     def cutvideo(self):
+        audiol=mutagen.File(middle_file+"/tts.mp3")
+        audiolength=int(audiol.info.length)
+
+        clip=VideoFileClip(video_file+"video/minecraft1.mp4")
+
+        trimmed_video=clip.subclip(0,audiolength+1)
+
+        trimmed_video=trimmed_video.without_audio()
+
+        trimmed_video.write_videofile(middle_file+"trimmed_video.mp4") 
+
+        trimmed_path=middle_file+"trimmed_video.mp4"
 
         self.videoplusvoice()
 
     def videoplusvoice(self):
-
+        
         self.subtitles()
 
     def subtitles(self):
