@@ -24,8 +24,10 @@ script_file=__file__+"/script"
 video_file=__file__+"/video"
 middle_file=__file__+"/middle"
 finish_file=__file__+"/finished"
+base=__file__+"/"
+print(base)
 
-basepath=__file__.replace("\\","/").replace(filename,"/")
+basepath=base.replace("\\","/").replace(filename,"/")
 script_file=script_file.replace("\\","/").replace(filename,"/")
 video_file=video_file.replace("\\","/").replace(filename,"/")
 middle_file=middle_file.replace("\\","/").replace(filename,"/")
@@ -49,6 +51,7 @@ text = ""
 speaker = "en-US-AndrewNeural"
 rate = 0
 #infer settings
+print(basepath)
 pth_path = basepath+"/logs/obama/obamapath.pth"
 index_path = basepath+"/logs/obama/obamaindex.index"
 input_path = basepath+"/assets/audios/tts_output.wav"
@@ -132,23 +135,23 @@ class Menu(QMainWindow,Ui_Main_menu):
         self.cutvideo()
 
     def cutvideo(self):
-        audiol=mutagen.File(middle_file+"/tts.mp3")
-        audiolength=int(audiol.info.length)
-
-        clip=VideoFileClip(video_file+"video/minecraft1.mp4")
-
+        audio=mutagen.File(middle_file+"/tts.mp3")
+        audiolength=int(audio.info.length)
+        clip=VideoFileClip(video_file+"/minecraft1.mp4")
         trimmed_video=clip.subclip(0,audiolength+1)
-
         trimmed_video=trimmed_video.without_audio()
-
-        trimmed_video.write_videofile(middle_file+"trimmed_video.mp4") 
-
-        trimmed_path=middle_file+"trimmed_video.mp4"
+        savepath=middle_file+"/trimmed_video.mp4"
+        trimmed_video.write_videofile(savepath) 
 
         self.videoplusvoice()
 
     def videoplusvoice(self):
-        
+        clip=VideoFileClip(middle_file+"/trimmed_video.mp4")
+        audio=AudioFileClip(middle_file+"/tts.mp3")
+        trimmed_with_audio = clip.set_audio(audio)
+        savepath=middle_file+"/trimmed_video_audio.mp4"
+        trimmed_with_audio.write_videofile(savepath)
+
         self.subtitles()
 
     def subtitles(self):
@@ -160,7 +163,7 @@ class Menu(QMainWindow,Ui_Main_menu):
         self.upload()
     
     def upload(self):
-        pass
+        print("mmm")
 
 if __name__ == '__main__':
     app=QApplication(sys.argv)
