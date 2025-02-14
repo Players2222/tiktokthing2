@@ -155,10 +155,40 @@ class Menu(QMainWindow,Ui_Main_menu):
         self.subtitles()
 
     def subtitles(self):
+        with open(script_file+"/script.txt","r") as temp:
+            script = temp.read()
+        sentences = wrap(script,20)
+
+        global subtitles
+        subtitles = []
+        start_time = 0
+        
+        for sentence in sentences:
+            duration = 1.2
+            subtitles.append({
+                'text': sentence ,
+                'start': start_time,
+                'end': start_time + duration
+            })
+            start_time += duration
 
         self.videoplussub()
     
     def videoplussub(self):
+
+        video=VideoFileClip(middle_file+"/trimmed_video_audio.mp4")
+
+        subtitle_clips = []
+
+        for subtitle in subtitles:  
+            txt_clip = TextClip(subtitle['text'], fontsize=26, font="Ariel Bold", color='blue', stroke_color='black', stroke_width=1)
+            txt_clip = txt_clip.set_position(('center', 'center')).set_duration(subtitle['end'] - subtitle['start'])
+            txt_clip = txt_clip.set_start(subtitle['start'])
+            subtitle_clips.append(txt_clip)
+
+        video = CompositeVideoClip([video] + subtitle_clips)
+        savepath=middle_file+"/video_Subtitles.mp4"
+        video.write_videofile(savepath, codec='libx264')
 
         self.upload()
     
