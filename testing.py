@@ -1,27 +1,40 @@
-import os
-import subprocess
+import praw
+import csv
+import time
 
+reddit = praw.Reddit(
+    client_id="l8nzxC1a_GSPVDmVR4UI2g",
+    client_secret="9RJM4I6RUNPkC_i3RXpQuMQx-LCK1A",
+    user_agent="MerMer by /u/Comfortable-Sky6282",
+    username="Comfortable-Sky6282",
+    password="Aalywbwdy830312@"
+)
 
-applio=__file__.replace(os.path.basename(__file__),"")
-applio=applio.replace("\\","/")
-applio=applio + "run-applio.bat"
-audio=__file__.replace(os.path.basename(__file__),"")
-audio=audio.replace("\\","/")
-audio=audio+"assets/audios/tts_rvc_output.wav"
+subreddit="AITAH"
 
+limit = 1
 
-ap=subprocess.Popen(applio, shell=True)
-id=ap.pid
-exit()
-print(id)
+csv_filename = 'reddit_scraper_output.csv'
 
-# r=requests.post("http://127.0.0.1:6969/")
-# Check every 1 second
+with open(csv_filename, mode='w', newline='', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    # Write the header row
+    writer.writerow(['Title', 'Upvotes', 'URL', 'Post Content'])
 
-# if r.status_code == 200:
-#     print("Reci")
-# else:
-#     print("hmm")
-    
+    # Get the subreddit
+    subreddit = reddit.subreddit(subreddit)
 
+    for submission in subreddit.top(limit=limit):
+        title = submission.title
+        upvotes = submission.score
+        url = submission.url
+        post=submission.selftext
 
+        writer.writerow([title, post])
+
+        print(f"Title: {title}")
+        print(f"Upvotes: {upvotes}")
+        print(f"URL: {url}")
+        print(f"POST: {post}")
+        print("-" * 40)
+        time.sleep(2)

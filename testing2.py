@@ -1,44 +1,37 @@
-import subprocess
-import requests
-import time
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
+import praw
+import csv
 import time
 
-subprocess.run(["python", "testing.py"])
+reddit = praw.Reddit(
+    client_id="l8nzxC1a_GSPVDmVR4UI2g",
+    client_secret="9RJM4I6RUNPkC_i3RXpQuMQx-LCK1A",
+    user_agent="MerMer by /u/Comfortable-Sky6282",
+    username="Comfortable-Sky6282",
+    password="Aalywbwdy830312@"
+)
 
-print("helloososn")
+subreddits=["AITAH","Creepypasta","TwoHotTakes"]
 
-while True:
-    time.sleep(10)
-    r=requests.post("http://127.0.0.1:6969/")
-    if r.status_code == 200:
-        print("Reci")
-    else:
-        print("hmm")
+limit=5
+for sub in subreddits:
+    csv_filename = sub+'_output.csv'
 
-    # Initialize WebDriver
-    driver = webdriver.Chrome()
 
-    # Open the URL
-    driver.get('http://127.0.0.1:6969/')
+    with open(csv_filename, mode='w', newline='', encoding='utf-8') as file:
 
-    # Wait for the page to load (adjust the time as needed)
-    time.sleep(3)
+        writer = csv.writer(file)
 
-    # Locate the button element you want to press (using an appropriate selector)
-    button = driver.find_element(By.ID, 'component-395')  # You can change this to another selector like By.CLASS_NAME, By.NAME, etc.
+        writer.writerow(['Title', 'Post Content'])
 
-    # Click the button
-    button.click()
+        subreddit = reddit.subreddit(sub)
 
-    # Alternatively, if you want to simulate a hover action before clicking
-    # action = ActionChains(driver)
-    # action.move_to_element(button).click().perform()
+        for submission in subreddit.new(limit=limit):
+            title = submission.title
+            post=submission.selftext
 
-    # Wait to see the result (optional)
-    time.sleep(3)
+            writer.writerow([title, post])
 
-    # Close the browser after performing the action
-    # driver.quit()
+            print(f"Title: {title}")
+            print(f"POST: {post}")
+            print("-" * 40)
+            time.sleep(2)
