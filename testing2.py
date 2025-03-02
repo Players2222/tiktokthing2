@@ -12,9 +12,18 @@ reddit = praw.Reddit(
 
 subreddits=["AITAH","Creepypasta","TwoHotTakes"]
 
+filename="/testing2.py/"
+
+script_file=__file__+"/script"
+
+script_file=script_file.replace("\\","/").replace(filename,"/")
+
 limit=5
 for sub in subreddits:
-    csv_filename = sub+'_output.csv'
+    csv_filename = script_file+"/"+sub+'_output.csv'
+
+    print(script_file)
+    print(csv_filename)
 
 
     with open(csv_filename, mode='w', newline='', encoding='utf-8') as file:
@@ -31,7 +40,7 @@ for sub in subreddits:
 
             writer.writerow([title, post])
 
-            print(f"Title: {title}")
-            print(f"POST: {post}")
+            # print(f"Title: {title}")
+            # print(f"POST: {post}")
             print("-" * 40)
             time.sleep(2)
