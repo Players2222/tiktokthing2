@@ -1,5 +1,7 @@
 import os
 import sys
+import csv
+import praw
 import mutagen
 import random
 import asyncio
@@ -18,14 +20,21 @@ change_settings({"IMAGEMAGICK_BINARY": "C:\\Program Files\ImageMagick-7.1.1-Q16-
 
 
 #creating constants and folders
-filename="/tiktokeditorv4.py/"
+filename="/tiktokeditorv5.py/"
 
 script_file=__file__+"/script"
 video_file=__file__+"/video"
 middle_file=__file__+"/middle"
 finish_file=__file__+"/finished"
 base=__file__+"/"
-print(base)
+
+reddit = praw.Reddit(
+    client_id="l8nzxC1a_GSPVDmVR4UI2g",
+    client_secret="9RJM4I6RUNPkC_i3RXpQuMQx-LCK1A",
+    user_agent="MerMer by /u/Comfortable-Sky6282",
+    username="Comfortable-Sky6282",
+    password="Aalywbwdy830312@"
+)
 
 basepath=base.replace("\\","/").replace(filename,"/")
 script_file=script_file.replace("\\","/").replace(filename,"/")
@@ -46,7 +55,7 @@ if not os.path.exists(middle_file):
             os.mkdir(middle_file)
 
 #tts settings
-input_text = script_file+"/script.txt"
+# input_text = script_file+"/script.txt"
 text = ""
 speaker = "en-US-AndrewNeural"
 rate = 0
@@ -56,6 +65,10 @@ pth_path = basepath+"/logs/obama/obamapath.pth"
 index_path = basepath+"/logs/obama/obamaindex.index"
 input_path = basepath+"/assets/audios/tts_output.wav"
 output_path = middle_file+"/tts.wav"
+
+# subreddits=["AITAH","Creepypasta","TwoHotTakes"]
+subreddits=["AITAH"]
+limit=1
 
 pitch = 0
 filter_radius = 3
@@ -90,14 +103,32 @@ class Menu(QMainWindow,Ui_Main_menu):
         super().__init__()
         self.setupUi(self)
         self.start()
-    
     def start(self):
         print("Starting!")
         self.webscrape()
     
     def webscrape(self):
+        for sub in subreddits:
+            global csv_filename 
+            global input_text
+            csv_filename = script_file+"/"+sub+'_output.csv'
+            input_text=csv_filename
+            with open(csv_filename, mode='w', newline='', encoding='utf-8') as file:
 
-        self.voiceover()
+                writer = csv.writer(file)
+
+                writer.writerow(['Title', 'Post Content'])
+
+                subreddit = reddit.subreddit(sub)
+
+                for submission in subreddit.new(limit=limit):
+                    title = submission.title
+                    global post
+                    post=submission.selftext
+
+                    writer.writerow([title, post])
+
+                    self.voiceover()
 
     def voiceover(self):
         with open(input_text, 'r') as file:
@@ -155,8 +186,7 @@ class Menu(QMainWindow,Ui_Main_menu):
         self.subtitles()
 
     def subtitles(self):
-        with open(script_file+"/script.txt","r") as temp:
-            script = temp.read()
+        script=post
         sentences = wrap(script,20)
 
         global subtitles

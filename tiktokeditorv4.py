@@ -157,6 +157,7 @@ class Menu(QMainWindow,Ui_Main_menu):
     def subtitles(self):
         with open(script_file+"/script.txt","r") as temp:
             script = temp.read()
+            print(type(script))
         sentences = wrap(script,20)
 
         global subtitles
